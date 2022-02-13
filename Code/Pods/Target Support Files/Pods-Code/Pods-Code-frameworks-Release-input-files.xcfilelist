@@ -1,0 +1,3 @@
+${PODS_ROOT}/Target Support Files/Pods-Code/Pods-Code-frameworks.sh
+${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework
+${BUILT_PRODUCTS_DIR}/UIScrollView-InfiniteScroll/UIScrollView_InfiniteScroll.framework
