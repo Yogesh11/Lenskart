@@ -17,20 +17,15 @@ class DetailCell: UITableViewCell {
     @IBOutlet weak var releaseDate: UILabel!
     @IBOutlet weak var voteCount: UILabel!
     @IBOutlet weak var addedToWatchlist: UIButton!
-    var movie : Movie?
+    var viewModel : MovieCellViewModel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
 
     @IBAction func addedToWatchList(_ sender: Any) {
-        if movie?.addedToWatchList()  == true {
-            movie?.removeFromWatchList()
-            addToWatchList(false)
-        } else{
-            movie?.addToWatchList()
-            addToWatchList(true)
-        }
+        viewModel.ctaAddedToWatchListAction()
+        updateImage()
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -39,33 +34,21 @@ class DetailCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func  refreshUI(movie: Movie?) {
-        self.movie = movie
-        originalTitleLabel.text = movie?.original_title
-        titleLabel.text = movie?.title
-        overView.text = movie?.overview
-        if let releaseDateTxt = movie?.release_date, !releaseDateTxt.isEmpty  {
-            releaseDate.text = Constant.DefaultText.releaseDate  + releaseDateTxt
-            voteCountTopConstraint.constant = 4
-        }  else{
-            releaseDate.text = nil
-            voteCountTopConstraint.constant = 0
-        }
-        
-        if let val  = movie?.popularity,  val > 0 {
-            popularity.text = Constant.DefaultText.popularity  + String(val)
-            releaseDateTopConstraint.constant = 4
-        } else{
-            popularity.text = nil
-            releaseDateTopConstraint.constant = 0
-        }
-        
-        voteCount.text = Constant.DefaultText.vote + String((movie?.vote_count ?? 0))
-        addToWatchList(movie?.addedToWatchList() ?? false)
+    func  refreshUI(vm: MovieCellViewModel) {
+        //self.movie = movie
+        viewModel  = vm
+        originalTitleLabel.text = vm.getOriginalTitle()
+        titleLabel.text = vm.getMovieTitle()
+        overView.text = vm.getOverView()
+        releaseDate.text = vm.getReleaseDate()
+        popularity.text = vm.getPopularity()
+        releaseDateTopConstraint.constant =  (popularity.text != nil) ? 4 : 0
+        voteCountTopConstraint.constant =  (releaseDate.text != nil) ? 4 : 0
+        voteCount.text =  vm.getVoteCount()
+        updateImage()
     }
     
-    private func addToWatchList(_ isAdded : Bool){
-        addedToWatchlist.setImage( UIImage(named: isAdded  ?  Constant.Assets.addedToWatchList : Constant.Assets.defaultWatchList), for: .normal)
-       
+    private func updateImage(){
+        addedToWatchlist.setImage( UIImage(named: viewModel.getImage()), for: .normal)
     }
 }

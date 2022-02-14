@@ -18,23 +18,16 @@ class LandingCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
-    func refreshUI(movie : Movie?){
-        titleLabel.text = movie?.title
-        if let val  = movie?.popularity,  val > 0 {
-            popularity.text = Constant.DefaultText.popularity  + String(val)
-            releaseDateTopConstraint.constant = 4
-        } else{
-            popularity.text = nil
-            releaseDateTopConstraint.constant = 0
-        }
-        if let releaseDateTxt = movie?.release_date, !releaseDateTxt.isEmpty  {
-            releaseDate.text = Constant.DefaultText.releaseDate  + releaseDateTxt
-        }  else{
-            releaseDate.text = nil
-        }
-        overView.text = movie?.overview
-        addedToWatchlist.image = UIImage(named: movie?.addedToWatchList() == true ?  Constant.Assets.addedToWatchList : Constant.Assets.defaultWatchList)
+    
+    func refreshUI(vm : MovieCellViewModel){
+        titleLabel.text = vm.getMovieTitle()
+        popularity.text = vm.getPopularity()
+        releaseDateTopConstraint.constant =  (popularity.text != nil) ? 4 : 0
+        releaseDate.text = vm.getReleaseDate()
+        overView.text = vm.getOverView()
+        addedToWatchlist.image = UIImage(named: vm.getImage())
     }
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 

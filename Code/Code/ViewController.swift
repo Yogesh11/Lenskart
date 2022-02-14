@@ -28,7 +28,7 @@ class ViewController: UIViewController {
         tableViewSetup()
         getData(page: 1, showLoader: true)
         tableView.addInfiniteScroll { [weak self](tableView) -> Void in
-            self?.getData(page: ((self?.vm.movies?.page ?? 0) + 1), showLoader: false)
+            self?.getData(page: self?.vm.getNextPage() ?? 1, showLoader: false)
         }
         self.title = Constant.ViewTitle.landingPage
     }
@@ -60,19 +60,19 @@ class ViewController: UIViewController {
 
 extension ViewController : UITableViewDataSource, UITableViewDelegate{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return vm.movies?.results?.count ?? 0
+        return vm.totalMovies()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constant.ViewIdentifier.landingCell, for: indexPath)
-        if let cellClass =  cell as? LandingCell {
-            cellClass.refreshUI(movie: vm.movies?.results?[indexPath.row])
+        if let cellClass =  cell as? LandingCell , let cellVM = MovieCellViewModel(movie: vm.getMovieByIndex(index: indexPath.row) ) {
+            cellClass.refreshUI(vm: cellVM)
         }
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        navigateToDetailScreen(movie: vm.movies?.results?[indexPath.row])
+        navigateToDetailScreen(movie: vm.getMovieByIndex(index: indexPath.row))
         tableView.deselectRow(at: indexPath, animated: true)
     }
     

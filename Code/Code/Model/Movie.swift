@@ -15,16 +15,18 @@ struct Movie: Codable {
     let vote_count  :Int?
     let popularity : Double?
     let release_date  : String
+    //var isAddedToWatchlist: Bool?
     
     func addedToWatchList()-> Bool {
         PersistentStore.shared.addedToWatchlist(movieId: id)
+        //return isAddedToWatchlist ?? false
     }
     
-    func addToWatchList() {
+     func addToWatchList() {
         PersistentStore.shared.addToWatchlist(movieId: id)
     }
     
-    func removeFromWatchList() {
+     func removeFromWatchList() {
         PersistentStore.shared.removeFromWatchList(movieId: id)
     }
 }

@@ -8,7 +8,7 @@
 import UIKit
 
 class MovieViewModel: NSObject {
-    var movies : Movies? = nil
+    private var movies : Movies? = nil
     func getDataforPage(_ page : Int, completionBlock : @escaping Constant.CompletionBlock){
         ApiManager.sharedInstance.getDataForPage(page) {[weak self] result, error in
             if let obj = result as? Movies {
@@ -25,5 +25,17 @@ class MovieViewModel: NSObject {
               completionBlock(result, error)
             }
         }
+    }
+    
+    func totalMovies()->Int{
+        movies?.results?.count ?? 0
+    }
+    
+    func getNextPage()->  Int {
+        (movies?.page ?? 0) + 1
+    }
+    
+    func getMovieByIndex(index  : Int) -> Movie?{
+        movies?.results?[safe : index]
     }
 }

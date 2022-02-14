@@ -33,8 +33,8 @@ extension DetailController : UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constant.ViewIdentifier.detailCell, for: indexPath)
-        if let cellClass =  cell as? DetailCell {
-            cellClass.refreshUI(movie: movie)
+        if let cellClass =  cell as? DetailCell , let vm =   MovieCellViewModel(movie: movie) {
+            cellClass.refreshUI(vm: vm)
             cellClass.selectionStyle  = .none
         }
         return cell
