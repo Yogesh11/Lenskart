@@ -35,7 +35,6 @@ class ViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        refreshView()
     }
     /** When user swipe down then below function will call and fetch first batch data from remote*/
     @objc private func pullToRefresh(_ refreshControl: UIRefreshControl){
@@ -67,17 +66,18 @@ extension ViewController : UITableViewDataSource, UITableViewDelegate{
         let cell = tableView.dequeueReusableCell(withIdentifier: Constant.ViewIdentifier.landingCell, for: indexPath)
         if let cellClass =  cell as? LandingCell , let cellVM = MovieCellViewModel(movie: vm.getMovieByIndex(index: indexPath.row) ) {
             cellClass.refreshUI(vm: cellVM)
+            cellClass.selectionStyle = .none
         }
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         navigateToDetailScreen(movie: vm.getMovieByIndex(index: indexPath.row))
-        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func navigateToDetailScreen(movie : Movie?){
         let detailController =  self.storyboard?.instantiateViewController(withIdentifier: Constant.ViewIdentifier.detailController) as? DetailController
+        detailController?.delegate = self
         detailController?.movie = movie
         navigationController?.pushViewController(detailController!, animated: true)
     }
@@ -98,5 +98,15 @@ extension ViewController : UITableViewDataSource, UITableViewDelegate{
         tableView.rowHeight = UITableView.automaticDimension
         tableView.refreshControl        = refreshControl
        registerCell()
+    }
+}
+
+extension  ViewController :  WatchListDelegate {
+    internal func didUpdateCell() {
+       if let indexPath = tableView.indexPathForSelectedRow {
+           tableView.reloadRows(at: [indexPath], with: .none)
+       } else{
+           refreshView()
+       }
     }
 }

@@ -14,18 +14,24 @@ class LandingCell: UITableViewCell {
     @IBOutlet weak var popularity: UILabel!
     @IBOutlet weak var addedToWatchlist: UIImageView!
     @IBOutlet weak var releaseDate: UILabel!
+    private var  viewModel  :  MovieCellViewModel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
     
     func refreshUI(vm : MovieCellViewModel){
+        viewModel = vm
         titleLabel.text = vm.getMovieTitle()
         popularity.text = vm.getPopularity()
         releaseDateTopConstraint.constant =  (popularity.text != nil) ? 4 : 0
         releaseDate.text = vm.getReleaseDate()
         overView.text = vm.getOverView()
-        addedToWatchlist.image = UIImage(named: vm.getImage())
+        updateImage()
+    }
+    
+    func updateImage(){
+        addedToWatchlist.image = UIImage(named: viewModel.getImage())
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

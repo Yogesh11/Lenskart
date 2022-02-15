@@ -11,6 +11,7 @@ class DetailCell: UITableViewCell {
     @IBOutlet weak var releaseDateTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var voteCountTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var titleLabel: UILabel!
+    weak  var delegate : WatchListDelegate?
     @IBOutlet weak var originalTitleLabel: UILabel!
     @IBOutlet weak var overView: UILabel!
     @IBOutlet weak var popularity: UILabel!
@@ -26,6 +27,7 @@ class DetailCell: UITableViewCell {
     @IBAction func addedToWatchList(_ sender: Any) {
         viewModel.ctaAddedToWatchListAction()
         updateImage()
+        delegate?.didUpdateCell()
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

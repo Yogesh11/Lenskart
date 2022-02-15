@@ -7,8 +7,13 @@
 
 import UIKit
 
+protocol WatchListDelegate : AnyObject {
+    func didUpdateCell()
+}
+
 class DetailController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
+    weak var delegate : WatchListDelegate?
     var movie : Movie?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +39,7 @@ extension DetailController : UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constant.ViewIdentifier.detailCell, for: indexPath)
         if let cellClass =  cell as? DetailCell , let vm =   MovieCellViewModel(movie: movie) {
+            cellClass.delegate = delegate
             cellClass.refreshUI(vm: vm)
             cellClass.selectionStyle  = .none
         }
