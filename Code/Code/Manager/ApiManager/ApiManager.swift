@@ -8,13 +8,12 @@
 import UIKit
 
  /** This class is used to call apis*/
-class ApiManager: NSObject {
-    static let sharedInstance = ApiManager()
+class ApiManager: NSObject {  
     private lazy var sessionManager: URLSession  = {
         return  LUrlSession().sessionManager
     }()
     
-    private override init() {
+    override init() {
         super.init()
     }
 
@@ -65,7 +64,7 @@ class ApiManager: NSObject {
     /** prepareErrorWithMessage : Prepare error with proper message.
             * errorMessage      : An instance of string. It will be used to show an popup on the screen.
      */
-    private func prepareErrorWithMessage(_ errorMessage : String? = nil) -> LError {
+    func prepareErrorWithMessage(_ errorMessage : String? = nil) -> LError {
         return LError(errorMessage: errorMessage)
     }
 }
